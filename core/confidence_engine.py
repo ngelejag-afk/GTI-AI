@@ -2,15 +2,23 @@
 GTI AI Confidence Engine
 """
 
+from models.market import MarketContext
 
-def calculate_confidence(score: int) -> int:
+
+def calculate_confidence(market: MarketContext) -> int:
     """
-    Returns confidence score between 0 and 100.
+    Calculates confidence score based on market conditions.
     """
-    if score < 0:
-        return 0
 
-    if score > 100:
-        return 100
+    score = 50
 
-    return score
+    if market.trend.lower() == "bullish":
+        score += 20
+
+    if market.session.lower() in ("london", "new york"):
+        score += 20
+
+    if not market.news:
+        score += 10
+
+    return min(score, 100)
