@@ -11,4 +11,7 @@ class MarketContext:
     timeframe: str
     trend: str
     session: str
+    market_structure: str
+    key_level: float
+    current_price: float
     news: bool
