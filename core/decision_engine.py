@@ -6,35 +6,26 @@ from models.decision import Decision
 
 
 def make_decision(confidence: int, risk_ok: bool) -> Decision:
-    """Creates a trading decision."""
+    """
+    Makes the final trading decision.
+    """
 
     if not risk_ok:
         return Decision(
             action="NO TRADE",
             confidence=confidence,
-            reason="Risk exceeds limit.",
-            approved=False,
+            reason="Risk rules failed.",
         )
 
     if confidence >= 80:
         return Decision(
             action="BUY",
             confidence=confidence,
-            reason="High confidence setup.",
-            approved=True,
-        )
-
-    if confidence >= 60:
-        return Decision(
-            action="WAIT",
-            confidence=confidence,
-            reason="Need more confirmation.",
-            approved=False,
+            reason="High confidence and risk approved.",
         )
 
     return Decision(
-        action="NO TRADE",
+        action="WAIT",
         confidence=confidence,
-        reason="Low confidence.",
-        approved=False,
+        reason="Confidence is not high enough.",
     )
