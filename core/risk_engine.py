@@ -2,10 +2,21 @@
 GTI AI Risk Engine
 """
 
+from models.trade import TradeSetup
 
-def validate_risk(risk_percent: float) -> bool:
+
+def check_risk(trade: TradeSetup) -> bool:
     """
-    Returns True if risk is within the allowed limit.
+    Validates whether the trade satisfies risk rules.
     """
 
-    return 0 < risk_percent <= 1.0
+    if trade.risk_percent > 1.0:
+        return False
+
+    if trade.stop_loss <= 0:
+        return False
+
+    if trade.take_profit <= trade.entry:
+        return False
+
+    return True
