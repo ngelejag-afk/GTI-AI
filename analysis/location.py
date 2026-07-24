@@ -1,22 +1,29 @@
 """
 GTI AI
 Location Analysis Engine
+Version 1.0
 """
 
 from models.market import MarketContext
 
 
-def analyze_location(market: MarketContext) -> str:
+def analyze_location(market: MarketContext) -> tuple[bool, str]:
     """
-    Analyze whether price is at a good trading location.
+    Check whether the current price is at a valid trading location.
+
+    Returns:
+        (approved, reason)
     """
 
-    distance = abs(market.current_price - market.key_level)
+    current = market.current_price
+    level = market.key_level
 
-    if distance <= 2.0:
-        return "GOOD"
+    distance = abs(current - level)
 
-    if distance <= 5.0:
-        return "AVERAGE"
+    if distance <= 5:
+        return True, "Price is at a key support/resistance level."
 
-    return "POOR"
+    if distance <= 15:
+        return True, "Price is close to a key level."
+
+    return False, "Price is too far from the nearest key level."
