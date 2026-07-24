@@ -1,6 +1,8 @@
 """
 GTI AI
 Signal Engine
+
+Creates a trading signal from the final decision.
 """
 
 from models.signal import Signal
@@ -8,14 +10,25 @@ from models.signal import Signal
 
 def generate_signal(decision: str) -> Signal:
     """
-    Generate trading signal.
+    Generate a Signal object from the trading decision.
     """
 
     reasons = {
-        "BUY": "Trend, confidence and risk requirements satisfied.",
-        "SELL": "Bearish setup confirmed.",
-        "WAIT": "Wait for better confirmation.",
-        "NO TRADE": "Trade rules not satisfied.",
+        "BUY": (
+            "Trend is bullish, confidence is high, "
+            "risk rules passed and market conditions are favorable."
+        ),
+        "SELL": (
+            "Trend is bearish, confidence is high, "
+            "risk rules passed and market conditions are favorable."
+        ),
+        "WAIT": (
+            "Market confirmation is not strong enough. "
+            "Wait for a better setup."
+        ),
+        "NO TRADE": (
+            "One or more GTI AI trading rules failed."
+        ),
     }
 
     confidence = {
@@ -28,5 +41,5 @@ def generate_signal(decision: str) -> Signal:
     return Signal(
         action=decision,
         confidence=confidence.get(decision, 0),
-        reason=reasons.get(decision, "Unknown"),
+        reason=reasons.get(decision, "Unknown decision."),
     )
