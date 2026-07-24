@@ -1,13 +1,16 @@
 """
 GTI AI
 Main Application Entry Point
-Version 0.1
+Version 0.2
 """
 
-from datetime import datetime
-
 from models.market import MarketContext
-from models.trade import TradeSetup
+
+from analysis.trend import analyze_trend
+from analysis.session import analyze_session
+from analysis.location import analyze_location
+from analysis.price_action import analyze_price_action
+from analysis.news import analyze_news
 
 from core.confidence_engine import calculate_confidence
 from core.risk_engine import check_risk
@@ -18,7 +21,7 @@ from core.signal_engine import generate_signal
 
 def main() -> None:
     """
-    GTI AI demo.
+    GTI AI Demo
     """
 
     market = MarketContext(
@@ -28,54 +31,22 @@ def main() -> None:
         session="London",
         market_structure="Uptrend",
         key_level=2350.00,
-        current_price=2352.30,
+        current_price=2348.20,
         news=False,
     )
 
-    trade = TradeSetup(
-        symbol="XAUUSD",
-        direction="BUY",
-        entry=2352.30,
-        stop_loss=2348.30,
-        take_profit=2360.30,
-        risk_percent=1.0,
-        reward_ratio=2.0,
-        confidence=0,
-        status="Pending",
-    )
+    trend = analyze_trend(market)
+    session_ok, session_reason = analyze_session(market)
+    location_ok, location_reason = analyze_location(market)
+    price_action_ok, price_action_reason = analyze_price_action(market)
+    news_ok, news_reason = analyze_news(market)
 
-    confidence = calculate_confidence(market)
+    print("=" * 50)
+    print("GTI AI MARKET ANALYSIS")
+    print("=" * 50)
 
-    risk_ok = check_risk(trade)
-
-    decision = make_decision(
-        confidence,
-        risk_ok,
-        market.trend,
-    )
-
-    explanation = generate_explanation(
-        decision=decision,
-        confidence=confidence,
-        trend=market.trend,
-        session=market.session,
-        risk_ok=risk_ok,
-        news=market.news,
-    )
-
-    signal = generate_signal(
-        symbol=trade.symbol,
-        action=decision,
-        entry=trade.entry,
-        stop_loss=trade.stop_loss,
-        take_profit=trade.take_profit,
-        confidence=confidence,
-        explanation=explanation,
-        timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-    )
-
-    print(signal)
-
-
-if __name__ == "__main__":
-    main()
+    print(f"Trend          : {trend}")
+    print(f"Session        : {session_reason}")
+    print(f"Location       : {location_reason}")
+    print(f"Price Action   : {price_action_reason}")
+    print(f"News           : {news_reason}")
