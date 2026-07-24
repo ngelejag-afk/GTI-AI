@@ -1,8 +1,7 @@
 """
 GTI AI
 Explainability Engine
-
-Generates a human-readable explanation for GTI AI decisions.
+Version 1.0
 """
 
 
@@ -11,55 +10,28 @@ def generate_explanation(
     confidence: int,
     trend: str,
     session: str,
-    risk_ok: bool,
-    news: bool,
+    location: str,
+    price_action: str,
+    news: str,
 ) -> str:
     """
-    Generate a detailed explanation for the final trading decision.
+    Generate a human-readable explanation
+    for the final trading decision.
     """
 
-    lines = [
-        "=" * 40,
-        "GTI AI ANALYSIS",
-        "=" * 40,
-        f"Decision        : {decision}",
-        f"Confidence      : {confidence}%",
-        f"Trend           : {trend}",
-        f"Session         : {session}",
-        f"Risk Check      : {'PASSED' if risk_ok else 'FAILED'}",
-        f"High Impact News: {'YES' if news else 'NO'}",
-        "",
-        "Explanation:",
-    ]
+    return f"""
+Decision      : {decision}
 
-    if decision == "BUY":
-        lines.extend([
-            "- Bullish market trend confirmed.",
-            "- Confidence score is strong.",
-            "- Risk rules passed.",
-            "- Market conditions support buying.",
-        ])
+Confidence    : {confidence}%
 
-    elif decision == "SELL":
-        lines.extend([
-            "- Bearish market trend confirmed.",
-            "- Confidence score is strong.",
-            "- Risk rules passed.",
-            "- Market conditions support selling.",
-        ])
+Trend         : {trend}
+Session       : {session}
+Location      : {location}
+Price Action  : {price_action}
+News          : {news}
 
-    elif decision == "WAIT":
-        lines.extend([
-            "- Market confirmation is weak.",
-            "- Better setup is required.",
-        ])
-
-    else:
-        lines.extend([
-            "- One or more GTI AI trading rules failed.",
-            "- No trade should be taken.",
-        ])
-
-    lines.append("=" * 40)
-
-    return "\n".join(lines)
+GTI AI Recommendation:
+The decision was generated after evaluating
+trend, session, key location, price action,
+and market news.
+"""
