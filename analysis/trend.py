@@ -1,6 +1,7 @@
 """
 GTI AI
 Trend Analysis Engine
+Version 1.0
 """
 
 from models.market import MarketContext
@@ -8,13 +9,42 @@ from models.market import MarketContext
 
 def analyze_trend(market: MarketContext) -> str:
     """
-    Returns the market trend.
+    Analyze the overall market trend.
+
+    Returns:
+        "Bullish", "Bearish", or "Sideways"
     """
 
-    if market.trend.upper() == "UP":
-        return "BUY"
+    trend = market.trend.strip().lower()
 
-    if market.trend.upper() == "DOWN":
-        return "SELL"
+    if trend == "bullish":
+        return "Bullish"
 
-    return "WAIT"
+    if trend == "bearish":
+        return "Bearish"
+
+    return "Sideways"
+
+
+def trend_score(trend: str) -> int:
+    """
+    Convert trend into a confidence score.
+    """
+
+    trend = trend.lower()
+
+    if trend == "bullish":
+        return 40
+
+    if trend == "bearish":
+        return 40
+
+    return 0
+
+
+def trend_is_tradeable(trend: str) -> bool:
+    """
+    Determine whether the trend is suitable for trading.
+    """
+
+    return trend.lower() in ("bullish", "bearish")
