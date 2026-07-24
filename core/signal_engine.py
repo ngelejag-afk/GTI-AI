@@ -1,16 +1,32 @@
 """
-GTI AI Signal Engine
+GTI AI
+Signal Engine
 """
 
 from models.signal import Signal
-from models.decision import Decision
 
 
-def generate_signal(decision: Decision) -> Signal:
-    """Converts a decision into a trading signal."""
+def generate_signal(decision: str) -> Signal:
+    """
+    Generate trading signal.
+    """
+
+    reasons = {
+        "BUY": "Trend, confidence and risk requirements satisfied.",
+        "SELL": "Bearish setup confirmed.",
+        "WAIT": "Wait for better confirmation.",
+        "NO TRADE": "Trade rules not satisfied.",
+    }
+
+    confidence = {
+        "BUY": 85,
+        "SELL": 85,
+        "WAIT": 60,
+        "NO TRADE": 40,
+    }
 
     return Signal(
-        action=decision.action,
-        confidence=decision.confidence,
-        reason=decision.reason,
+        action=decision,
+        confidence=confidence.get(decision, 0),
+        reason=reasons.get(decision, "Unknown"),
     )
