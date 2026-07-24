@@ -1,51 +1,65 @@
 """
 GTI AI
 Explainability Engine
+
+Generates a human-readable explanation for GTI AI decisions.
 """
 
 
-def explain_decision(
+def generate_explanation(
     decision: str,
+    confidence: int,
     trend: str,
     session: str,
-    confidence: int,
     risk_ok: bool,
     news: bool,
 ) -> str:
     """
-    Generate a human-readable explanation for the trading decision.
+    Generate a detailed explanation for the final trading decision.
     """
 
-    reasons = []
-
-    reasons.append(f"Trend: {trend}")
-    reasons.append(f"Session: {session}")
-    reasons.append(f"Confidence Score: {confidence}%")
-    reasons.append(f"Risk Check: {'Passed' if risk_ok else 'Failed'}")
-    reasons.append(
-        f"High Impact News: {'Yes' if news else 'No'}"
-    )
+    lines = [
+        "=" * 40,
+        "GTI AI ANALYSIS",
+        "=" * 40,
+        f"Decision        : {decision}",
+        f"Confidence      : {confidence}%",
+        f"Trend           : {trend}",
+        f"Session         : {session}",
+        f"Risk Check      : {'PASSED' if risk_ok else 'FAILED'}",
+        f"High Impact News: {'YES' if news else 'NO'}",
+        "",
+        "Explanation:",
+    ]
 
     if decision == "BUY":
-        summary = (
-            "BUY because trend is bullish, risk rules passed, "
-            "confidence is strong and market conditions are favorable."
-        )
+        lines.extend([
+            "- Bullish market trend confirmed.",
+            "- Confidence score is strong.",
+            "- Risk rules passed.",
+            "- Market conditions support buying.",
+        ])
 
     elif decision == "SELL":
-        summary = (
-            "SELL because trend is bearish, risk rules passed, "
-            "confidence is strong and market conditions are favorable."
-        )
+        lines.extend([
+            "- Bearish market trend confirmed.",
+            "- Confidence score is strong.",
+            "- Risk rules passed.",
+            "- Market conditions support selling.",
+        ])
 
     elif decision == "WAIT":
-        summary = (
-            "WAIT because confirmation is not strong enough."
-        )
+        lines.extend([
+            "- Market confirmation is weak.",
+            "- Better setup is required.",
+        ])
 
     else:
-        summary = (
-            "NO TRADE because one or more GTI AI rules failed."
-        )
+        lines.extend([
+            "- One or more GTI AI trading rules failed.",
+            "- No trade should be taken.",
+        ])
 
-    return "\n".join(reasons) + "\n\nExplanation:\n" + summary
+    lines.append("=" * 40)
+
+    return "\n".join(lines)
