@@ -1,22 +1,19 @@
 """
-GTI AI Risk Engine
+GTI AI
+Risk Engine
+Version 1.0
 """
 
-from models.trade import TradeSetup
 
-
-def check_risk(trade: TradeSetup) -> bool:
+def check_risk(confidence: int) -> bool:
     """
-    Validates whether the trade satisfies risk rules.
+    Determine whether a trade passes the minimum confidence requirement.
+
+    Returns:
+        True if trade is allowed.
+        False otherwise.
     """
 
-    if trade.risk_percent > 1.0:
-        return False
+    MINIMUM_CONFIDENCE = 70
 
-    if trade.stop_loss <= 0:
-        return False
-
-    if trade.take_profit <= trade.entry:
-        return False
-
-    return True
+    return confidence >= MINIMUM_CONFIDENCE
