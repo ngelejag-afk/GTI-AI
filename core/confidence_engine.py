@@ -1,45 +1,44 @@
 """
 GTI AI
 Confidence Engine
-
-Calculates confidence score for a trade setup.
+Version 1.0
 """
 
-from models.market import MarketContext
 
-
-def calculate_confidence(market: MarketContext) -> int:
+def calculate_confidence(
+    trend: str,
+    session: bool,
+    location: bool,
+    price_action: bool,
+    news: bool,
+) -> int:
     """
-    Calculate confidence score from market conditions.
+    Calculate GTI AI confidence score.
 
     Returns:
-        int: Confidence score (0-100)
+        Confidence percentage (0-100)
     """
 
     score = 0
 
     # Trend
-    if market.trend.lower() == "bullish":
-        score += 25
-    elif market.trend.lower() == "bearish":
-        score += 25
-
-    # Market Structure
-    if market.market_structure.lower() in ("uptrend", "downtrend"):
-        score += 20
+    if trend.upper() in ("BULLISH", "BEARISH"):
+        score += 30
 
     # Trading Session
-    if market.session.lower() in ("london", "new york"):
+    if session:
         score += 20
 
-    # News Filter
-    if not market.news:
+    # Key Level / Location
+    if location:
         score += 20
 
-    # Price near key level
-    distance = abs(market.current_price - market.key_level)
+    # Price Action
+    if price_action:
+        score += 20
 
-    if distance <= 5:
-        score += 15
+    # No High Impact News
+    if news:
+        score += 10
 
-    return min(score, 100)
+    return score
