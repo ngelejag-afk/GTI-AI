@@ -1,17 +1,29 @@
 """
-GTI AI Market Model
+GTI AI
+Market Context
+Version 2.0
 """
 
-from dataclasses import dataclass
 
-
-@dataclass
 class MarketContext:
-    symbol: str
-    timeframe: str
-    trend: str
-    session: str
-    market_structure: str
-    key_level: float
-    current_price: float
-    news: bool
+    """
+    Holds all market information required by GTI AI.
+    """
+
+    def __init__(
+        self,
+        symbol: str,
+        timeframe: str,
+        trend: str,
+        session: str,
+        location: str,
+        confirmation: str,
+        news: str,
+    ) -> None:
+        self.symbol = symbol
+        self.timeframe = timeframe
+        self.trend = trend
+        self.session = session
+        self.location = location
+        self.confirmation = confirmation
+        self.news = news
