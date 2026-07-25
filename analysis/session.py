@@ -1,32 +1,35 @@
 """
 GTI AI
 Session Analysis Engine
-Version 1.0
+Version 2.0
 """
 
-from models.market import MarketContext
 
-
-def analyze_session(market: MarketContext) -> tuple[bool, str]:
+class SessionEngine:
     """
-    Check whether the current trading session is suitable.
-
-    Returns:
-        (approved, reason)
+    Determines whether the current trading session is favorable.
     """
 
-    session = market.session.strip().upper()
+    def __init__(self, session: str):
+        self.session = session.strip().upper()
 
-    if session == "LONDON":
-        return True, "London session is active."
+    def analyze(self) -> str:
+        if self.session == "LONDON":
+            return "London"
 
-    if session == "NEW YORK":
-        return True, "New York session is active."
+        if self.session == "NEW YORK":
+            return "New York"
 
-    if session == "LONDON-NEW YORK":
-        return True, "London/New York overlap detected."
+        if self.session == "LONDON_NEW_YORK":
+            return "London + New York Overlap"
 
-    if session == "ASIAN":
-        return False, "Asian session has lower volatility."
+        return "Inactive"
 
-    return False, f"Unknown trading session: {market.session}"
+    def score(self) -> int:
+        if self.session in ("LONDON", "NEW YORK", "LONDON_NEW_YORK"):
+            return 20
+
+        return 0
+
+    def trade_allowed(self) -> bool:
+        return self.session in ("LONDON", "NEW YORK", "LONDON_NEW_YORK")
