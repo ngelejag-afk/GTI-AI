@@ -1,50 +1,45 @@
 """
 GTI AI
 Trend Analysis Engine
-Version 1.0
+Version 2.0
 """
 
-from models.market import MarketContext
 
-
-def analyze_trend(market: MarketContext) -> str:
+class TrendEngine:
     """
-    Analyze the overall market trend.
-
-    Returns:
-        "Bullish", "Bearish", or "Sideways"
+    Determines the higher timeframe market trend.
     """
 
-    trend = market.trend.strip().lower()
+    def __init__(self, timeframe: str, trend: str):
+        self.timeframe = timeframe
+        self.trend = trend.strip().upper()
 
-    if trend == "bullish":
-        return "Bullish"
+    def analyze(self) -> str:
+        """
+        Return the detected trend.
+        """
 
-    if trend == "bearish":
-        return "Bearish"
+        if self.trend == "BULLISH":
+            return "Bullish"
 
-    return "Sideways"
+        if self.trend == "BEARISH":
+            return "Bearish"
 
+        return "Sideways"
 
-def trend_score(trend: str) -> int:
-    """
-    Convert trend into a confidence score.
-    """
+    def score(self) -> int:
+        """
+        Return confidence contribution.
+        """
 
-    trend = trend.lower()
+        if self.trend in ("BULLISH", "BEARISH"):
+            return 30
 
-    if trend == "bullish":
-        return 40
+        return 0
 
-    if trend == "bearish":
-        return 40
+    def trade_allowed(self) -> bool:
+        """
+        Check whether trading is allowed.
+        """
 
-    return 0
-
-
-def trend_is_tradeable(trend: str) -> bool:
-    """
-    Determine whether the trend is suitable for trading.
-    """
-
-    return trend.lower() in ("bullish", "bearish")
+        return self.trend in ("BULLISH", "BEARISH")
