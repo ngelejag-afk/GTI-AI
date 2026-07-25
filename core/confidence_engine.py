@@ -1,44 +1,44 @@
 """
 GTI AI
 Confidence Engine
-Version 1.0
+Version 2.0
 """
 
 
-def calculate_confidence(
-    trend: str,
-    session: bool,
-    location: bool,
-    price_action: bool,
-    news: bool,
-) -> int:
+class ConfidenceEngine:
     """
-    Calculate GTI AI confidence score.
-
-    Returns:
-        Confidence percentage (0-100)
+    Calculates the overall GTI AI confidence score.
     """
 
-    score = 0
+    TREND_SCORE = 30
+    SESSION_SCORE = 20
+    LOCATION_SCORE = 20
+    PRICE_ACTION_SCORE = 20
+    NEWS_SCORE = 10
 
-    # Trend
-    if trend.upper() in ("BULLISH", "BEARISH"):
-        score += 30
+    def __init__(
+        self,
+        trend: int,
+        session: int,
+        location: int,
+        price_action: int,
+        news: int,
+    ) -> None:
+        self.trend = trend
+        self.session = session
+        self.location = location
+        self.price_action = price_action
+        self.news = news
 
-    # Trading Session
-    if session:
-        score += 20
+    def calculate(self) -> int:
+        """
+        Return total confidence score.
+        """
 
-    # Key Level / Location
-    if location:
-        score += 20
-
-    # Price Action
-    if price_action:
-        score += 20
-
-    # No High Impact News
-    if news:
-        score += 10
-
-    return score
+        return (
+            self.trend
+            + self.session
+            + self.location
+            + self.price_action
+            + self.news
+        )
