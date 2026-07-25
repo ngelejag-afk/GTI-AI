@@ -1,19 +1,24 @@
 """
 GTI AI
 Risk Engine
-Version 1.0
+Version 2.0
 """
 
 
-def check_risk(confidence: int) -> bool:
+class RiskEngine:
     """
-    Determine whether a trade passes the minimum confidence requirement.
-
-    Returns:
-        True if trade is allowed.
-        False otherwise.
+    Determines whether a trade satisfies
+    the minimum GTI AI confidence requirement.
     """
 
     MINIMUM_CONFIDENCE = 70
 
-    return confidence >= MINIMUM_CONFIDENCE
+    def __init__(self, confidence: int) -> None:
+        self.confidence = confidence
+
+    def trade_allowed(self) -> bool:
+        """
+        Return True if the trade is allowed.
+        """
+
+        return self.confidence >= self.MINIMUM_CONFIDENCE
