@@ -1,30 +1,45 @@
 """
 GTI AI
 Price Action Analysis Engine
-Version 1.0
+Version 2.0
 """
 
-from models.market import MarketContext
 
-
-def analyze_price_action(market: MarketContext) -> tuple[bool, str]:
+class PriceActionEngine:
     """
-    Validate whether price action supports a trade.
-
-    Returns:
-        (approved, reason)
+    Determines whether price action confirms
+    the current market direction.
     """
 
-    trend = market.trend.upper()
-    structure = market.market_structure.upper()
+    def __init__(self, confirmation: str):
+        self.confirmation = confirmation.strip().upper()
 
-    if trend == "BULLISH" and structure == "UPTREND":
-        return True, "Bullish trend confirmed."
+    def analyze(self) -> str:
+        """
+        Return the detected price action confirmation.
+        """
 
-    if trend == "BEARISH" and structure == "DOWNTREND":
-        return True, "Bearish trend confirmed."
+        if self.confirmation == "BULLISH":
+            return "Bullish Confirmation"
 
-    if structure == "SIDEWAYS":
-        return False, "Market is ranging."
+        if self.confirmation == "BEARISH":
+            return "Bearish Confirmation"
 
-    return False, "Price action confirmation not found."
+        return "No Confirmation"
+
+    def score(self) -> int:
+        """
+        Return confidence contribution.
+        """
+
+        if self.confirmation in ("BULLISH", "BEARISH"):
+            return 20
+
+        return 0
+
+    def trade_allowed(self) -> bool:
+        """
+        Check whether price action supports trading.
+        """
+
+        return self.confirmation in ("BULLISH", "BEARISH")
