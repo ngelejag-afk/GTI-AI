@@ -1,31 +1,42 @@
 """
 GTI AI
 Signal Engine
-Version 1.0
+Version 2.0
 """
 
 
-def generate_signal(
-    decision: str,
-    confidence: int,
-    explanation: str,
-) -> str:
+class SignalEngine:
     """
-    Generate the final GTI AI trading signal.
+    Generates the final GTI AI trading signal.
     """
 
-    return f"""
+    def __init__(
+        self,
+        decision: str,
+        confidence: int,
+        explanation: str,
+    ) -> None:
+        self.decision = decision
+        self.confidence = confidence
+        self.explanation = explanation
+
+    def generate(self) -> str:
+        """
+        Return the final GTI AI signal.
+        """
+
+        return f"""
 ==============================
 GTI AI SIGNAL
 ==============================
 
-Decision   : {decision}
+Decision   : {self.decision}
 
-Confidence : {confidence}%
+Confidence : {self.confidence}%
 
 ------------------------------
 
-{explanation}
+{self.explanation}
 
 ==============================
 """
