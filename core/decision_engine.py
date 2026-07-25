@@ -1,30 +1,35 @@
 """
 GTI AI
 Decision Engine
-Version 1.0
+Version 2.0
 """
 
 
-def make_decision(
-    confidence: int,
-    risk_ok: bool,
-) -> str:
+class DecisionEngine:
     """
-    Make the final trading decision.
-
-    Returns:
-        BUY
-        WAIT
-        NO TRADE
+    Makes the final GTI AI trading decision.
     """
 
-    if not risk_ok:
+    def __init__(
+        self,
+        confidence: int,
+        risk_allowed: bool,
+    ) -> None:
+        self.confidence = confidence
+        self.risk_allowed = risk_allowed
+
+    def decide(self) -> str:
+        """
+        Return the final trading decision.
+        """
+
+        if not self.risk_allowed:
+            return "NO TRADE"
+
+        if self.confidence >= 90:
+            return "BUY"
+
+        if self.confidence >= 70:
+            return "WAIT"
+
         return "NO TRADE"
-
-    if confidence >= 90:
-        return "BUY"
-
-    if confidence >= 70:
-        return "WAIT"
-
-    return "NO TRADE"
