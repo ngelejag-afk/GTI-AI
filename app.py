@@ -1,16 +1,14 @@
 """
 GTI AI
 Main Application
-Version 2.0
+Version 2.1
 """
 
-from models.market import MarketContext
-
-from analysis.trend import analyze_trend
-from analysis.session import analyze_session
-from analysis.location import analyze_location
-from analysis.price_action import analyze_price_action
-from analysis.news import analyze_news
+from analysis.trend import TrendEngine
+from analysis.session import SessionEngine
+from analysis.location import LocationEngine
+from analysis.price_action import PriceActionEngine
+from analysis.news import NewsEngine
 
 from core.confidence_engine import ConfidenceEngine
 from core.risk_engine import RiskEngine
@@ -20,27 +18,24 @@ from core.signal_engine import SignalEngine
 
 
 def main() -> None:
-    """
-    GTI AI Entry Point
-    """
+    trend_engine = TrendEngine("H4", "BULLISH")
+    session_engine = SessionEngine("LONDON")
+    location_engine = LocationEngine("KEY_LEVEL")
+    price_action_engine = PriceActionEngine("BULLISH")
+    news_engine = NewsEngine("SAFE")
 
-    market = MarketContext(
-        symbol="XAUUSD",
-        timeframe="H1",
-    )
-
-    trend = analyze_trend(market)
-    session = analyze_session(market)
-    location = analyze_location(market)
-    price_action = analyze_price_action(market)
-    news = analyze_news(market)
+    trend = trend_engine.analyze()
+    session = session_engine.analyze()
+    location = location_engine.analyze()
+    price_action = price_action_engine.analyze()
+    news = news_engine.analyze()
 
     confidence = ConfidenceEngine(
-        trend=30 if trend.upper() in ("BULLISH", "BEARISH") else 0,
-        session=20 if session else 0,
-        location=20 if location else 0,
-        price_action=20 if price_action else 0,
-        news=10 if news else 0,
+        trend=trend_engine.score(),
+        session=session_engine.score(),
+        location=location_engine.score(),
+        price_action=price_action_engine.score(),
+        news=news_engine.score(),
     ).calculate()
 
     risk_allowed = RiskEngine(confidence).trade_allowed()
@@ -54,10 +49,10 @@ def main() -> None:
         decision,
         confidence,
         trend,
-        str(session),
-        str(location),
-        str(price_action),
-        str(news),
+        session,
+        location,
+        price_action,
+        news,
     ).generate()
 
     signal = SignalEngine(
