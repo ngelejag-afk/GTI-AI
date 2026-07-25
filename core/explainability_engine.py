@@ -1,34 +1,49 @@
 """
 GTI AI
 Explainability Engine
-Version 1.0
+Version 2.0
 """
 
 
-def generate_explanation(
-    decision: str,
-    confidence: int,
-    trend: str,
-    session: str,
-    location: str,
-    price_action: str,
-    news: str,
-) -> str:
+class ExplainabilityEngine:
     """
-    Generate a human-readable explanation
-    for the final trading decision.
+    Generates a human-readable explanation
+    for the GTI AI decision.
     """
 
-    return f"""
-Decision      : {decision}
+    def __init__(
+        self,
+        decision: str,
+        confidence: int,
+        trend: str,
+        session: str,
+        location: str,
+        price_action: str,
+        news: str,
+    ) -> None:
+        self.decision = decision
+        self.confidence = confidence
+        self.trend = trend
+        self.session = session
+        self.location = location
+        self.price_action = price_action
+        self.news = news
 
-Confidence    : {confidence}%
+    def generate(self) -> str:
+        """
+        Return the final explanation.
+        """
 
-Trend         : {trend}
-Session       : {session}
-Location      : {location}
-Price Action  : {price_action}
-News          : {news}
+        return f"""
+Decision      : {self.decision}
+
+Confidence    : {self.confidence}%
+
+Trend         : {self.trend}
+Session       : {self.session}
+Location      : {self.location}
+Price Action  : {self.price_action}
+News          : {self.news}
 
 GTI AI Recommendation:
 The decision was generated after evaluating
