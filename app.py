@@ -1,7 +1,7 @@
 """
 GTI AI
 Main Application
-Version 2.2
+Version 2.3
 """
 
 from core.scenario_engine import ScenarioEngine
@@ -19,43 +19,16 @@ from core.explainability_engine import ExplainabilityEngine
 from core.signal_engine import SignalEngine
 
 
-def main() -> None:
-    """
-    GTI AI Entry Point
-    """
+def run_scenario(name, market):
+    print("=" * 60)
+    print(name)
+    print("=" * 60)
 
-    # Change this line to test different scenarios:
-    # ScenarioEngine.bullish()
-    # ScenarioEngine.bearish()
-    # ScenarioEngine.no_trade()
-    market = ScenarioEngine.bearish()
-
-    trend_engine = TrendEngine(
-        market.timeframe,
-        market.trend,
-    )
-
-    session_engine = SessionEngine(
-        market.session,
-    )
-
-    location_engine = LocationEngine(
-        market.location,
-    )
-
-    price_action_engine = PriceActionEngine(
-        market.confirmation,
-    )
-
-    news_engine = NewsEngine(
-        market.news,
-    )
-
-    trend = trend_engine.analyze()
-    session = session_engine.analyze()
-    location = location_engine.analyze()
-    price_action = price_action_engine.analyze()
-    news = news_engine.analyze()
+    trend_engine = TrendEngine(market.timeframe, market.trend)
+    session_engine = SessionEngine(market.session)
+    location_engine = LocationEngine(market.location)
+    price_action_engine = PriceActionEngine(market.confirmation)
+    news_engine = NewsEngine(market.news)
 
     confidence = ConfidenceEngine(
         trend=trend_engine.score(),
@@ -65,9 +38,7 @@ def main() -> None:
         news=news_engine.score(),
     ).calculate()
 
-    risk_allowed = RiskEngine(
-        confidence,
-    ).trade_allowed()
+    risk_allowed = RiskEngine(confidence).trade_allowed()
 
     decision = DecisionEngine(
         confidence,
@@ -77,11 +48,11 @@ def main() -> None:
     explanation = ExplainabilityEngine(
         decision,
         confidence,
-        trend,
-        session,
-        location,
-        price_action,
-        news,
+        trend_engine.analyze(),
+        session_engine.analyze(),
+        location_engine.analyze(),
+        price_action_engine.analyze(),
+        news_engine.analyze(),
     ).generate()
 
     signal = SignalEngine(
@@ -91,6 +62,13 @@ def main() -> None:
     ).generate()
 
     print(signal)
+    print()
+
+
+def main():
+    run_scenario("BULLISH SCENARIO", ScenarioEngine.bullish())
+    run_scenario("BEARISH SCENARIO", ScenarioEngine.bearish())
+    run_scenario("NO TRADE SCENARIO", ScenarioEngine.no_trade())
 
 
 if __name__ == "__main__":
