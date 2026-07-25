@@ -1,9 +1,9 @@
+
 """
 GTI AI
 Indicators Engine
-Version 1.0
+Version 2.0
 """
-
 
 from models.market_data import MarketData
 
@@ -34,18 +34,24 @@ class IndicatorsEngine:
             return 0.0
 
         return sum(closes) / len(closes)
+
     @staticmethod
-    def ema(history: list[MarketData]) -> float:
+    def ema(
+        history: list[MarketData],
+        period: int,
+    ) -> float:
         """
-        Return a simplified Exponential Moving Average.
+        Return the Exponential Moving Average.
         """
 
         closes = IndicatorsEngine.closing_prices(history)
 
-        if not closes:
+        if len(closes) < period:
             return 0.0
 
-        multiplier = 2 / (len(closes) + 1)
+        closes = closes[-period:]
+
+        multiplier = 2 / (period + 1)
 
         ema = closes[0]
 
