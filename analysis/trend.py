@@ -1,45 +1,49 @@
 """
 GTI AI
-Trend Analysis Engine
-Version 2.0
+Trend Engine
+Version 3.0
 """
+
+from models.market_data import MarketData
 
 
 class TrendEngine:
     """
-    Determines the higher timeframe market trend.
+    Determines the market trend
+    from XAUUSD candle data.
     """
 
-    def __init__(self, timeframe: str, trend: str):
-        self.timeframe = timeframe
-        self.trend = trend.strip().upper()
+    def __init__(self, market_data: MarketData) -> None:
+        self.market_data = market_data
 
     def analyze(self) -> str:
         """
-        Return the detected trend.
+        Analyze the current candle.
         """
 
-        if self.trend == "BULLISH":
-            return "Bullish"
+        if self.market_data.close > self.market_data.open:
+            return "BULLISH"
 
-        if self.trend == "BEARISH":
-            return "Bearish"
+        if self.market_data.close < self.market_data.open:
+            return "BEARISH"
 
-        return "Sideways"
+        return "SIDEWAYS"
 
     def score(self) -> int:
         """
-        Return confidence contribution.
+        Return the trend confidence score.
         """
 
-        if self.trend in ("BULLISH", "BEARISH"):
+        trend = self.analyze()
+
+        if trend in ("BULLISH", "BEARISH"):
             return 30
 
         return 0
 
     def trade_allowed(self) -> bool:
         """
-        Check whether trading is allowed.
+        Return True if a trend exists.
         """
 
-        return self.trend in ("BULLISH", "BEARISH")
+        return self.analyze() != "SIDEWAYS"
