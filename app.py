@@ -1,8 +1,10 @@
 """
 GTI AI
 Main Application
-Version 2.1
+Version 2.2
 """
+
+from core.scenario_engine import ScenarioEngine
 
 from analysis.trend import TrendEngine
 from analysis.session import SessionEngine
@@ -18,11 +20,36 @@ from core.signal_engine import SignalEngine
 
 
 def main() -> None:
-    trend_engine = TrendEngine("H4", "BULLISH")
-    session_engine = SessionEngine("LONDON")
-    location_engine = LocationEngine("KEY_LEVEL")
-    price_action_engine = PriceActionEngine("BULLISH")
-    news_engine = NewsEngine("SAFE")
+    """
+    GTI AI Entry Point
+    """
+
+    # Change this line to test different scenarios:
+    # ScenarioEngine.bullish()
+    # ScenarioEngine.bearish()
+    # ScenarioEngine.no_trade()
+    market = ScenarioEngine.bearish()
+
+    trend_engine = TrendEngine(
+        market.timeframe,
+        market.trend,
+    )
+
+    session_engine = SessionEngine(
+        market.session,
+    )
+
+    location_engine = LocationEngine(
+        market.location,
+    )
+
+    price_action_engine = PriceActionEngine(
+        market.confirmation,
+    )
+
+    news_engine = NewsEngine(
+        market.news,
+    )
 
     trend = trend_engine.analyze()
     session = session_engine.analyze()
@@ -38,7 +65,9 @@ def main() -> None:
         news=news_engine.score(),
     ).calculate()
 
-    risk_allowed = RiskEngine(confidence).trade_allowed()
+    risk_allowed = RiskEngine(
+        confidence,
+    ).trade_allowed()
 
     decision = DecisionEngine(
         confidence,
