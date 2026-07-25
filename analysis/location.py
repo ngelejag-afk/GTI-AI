@@ -1,29 +1,32 @@
 """
 GTI AI
 Location Analysis Engine
-Version 1.0
+Version 2.0
 """
 
-from models.market import MarketContext
 
-
-def analyze_location(market: MarketContext) -> tuple[bool, str]:
+class LocationEngine:
     """
-    Check whether the current price is at a valid trading location.
-
-    Returns:
-        (approved, reason)
+    Determines whether price is at a high-probability trading location.
     """
 
-    current = market.current_price
-    level = market.key_level
+    def __init__(self, location: str):
+        self.location = location.strip().upper()
 
-    distance = abs(current - level)
+    def analyze(self) -> str:
+        if self.location == "KEY_LEVEL":
+            return "Key Support/Resistance"
 
-    if distance <= 5:
-        return True, "Price is at a key support/resistance level."
+        if self.location == "PULLBACK":
+            return "Healthy Pullback"
 
-    if distance <= 15:
-        return True, "Price is close to a key level."
+        return "Poor Location"
 
-    return False, "Price is too far from the nearest key level."
+    def score(self) -> int:
+        if self.location in ("KEY_LEVEL", "PULLBACK"):
+            return 20
+
+        return 0
+
+    def trade_allowed(self) -> bool:
+        return self.location in ("KEY_LEVEL", "PULLBACK")
