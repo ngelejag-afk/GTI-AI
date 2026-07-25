@@ -1,21 +1,32 @@
 """
 GTI AI
 News Analysis Engine
-Version 1.0
+Version 2.0
 """
 
-from models.market import MarketContext
 
-
-def analyze_news(market: MarketContext) -> tuple[bool, str]:
+class NewsEngine:
     """
-    Check whether high-impact news blocks trading.
-
-    Returns:
-        (approved, reason)
+    Determines whether market news allows trading.
     """
 
-    if market.news:
-        return False, "High-impact news detected."
+    def __init__(self, news: str):
+        self.news = news.strip().upper()
 
-    return True, "No high-impact news."
+    def analyze(self) -> str:
+        if self.news == "SAFE":
+            return "No High Impact News"
+
+        if self.news == "HIGH_IMPACT":
+            return "High Impact News"
+
+        return "Unknown"
+
+    def score(self) -> int:
+        if self.news == "SAFE":
+            return 10
+
+        return 0
+
+    def trade_allowed(self) -> bool:
+        return self.news == "SAFE"
