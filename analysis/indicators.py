@@ -34,3 +34,22 @@ class IndicatorsEngine:
             return 0.0
 
         return sum(closes) / len(closes)
+    @staticmethod
+    def ema(history: list[MarketData]) -> float:
+        """
+        Return a simplified Exponential Moving Average.
+        """
+
+        closes = IndicatorsEngine.closing_prices(history)
+
+        if not closes:
+            return 0.0
+
+        multiplier = 2 / (len(closes) + 1)
+
+        ema = closes[0]
+
+        for price in closes[1:]:
+            ema = (price - ema) * multiplier + ema
+
+        return ema
