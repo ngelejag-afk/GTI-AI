@@ -18,9 +18,6 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Run GTI AI
-        run: |
-          python app.py
       - name: Show repository structure
         run: |
           pwd
