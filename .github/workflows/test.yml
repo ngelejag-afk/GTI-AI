@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   test:
@@ -13,6 +14,17 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Show commit information
+        run: |
+          echo "Current commit:"
+          git rev-parse HEAD
+          echo
+          echo "Latest commit:"
+          git log --oneline -1
+          echo
+          echo "Current branch:"
+          git branch
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -21,7 +33,23 @@ jobs:
       - name: Show repository structure
         run: |
           pwd
+          echo "=============================="
           find .
+          echo "=============================="
+          echo "Core directory:"
+          ls -la core || echo "core folder NOT FOUND"
+          echo "=============================="
+          echo "Broker directory:"
+          ls -la broker || echo "broker folder NOT FOUND"
+          echo "=============================="
+          echo "Strategy directory:"
+          ls -la strategy || echo "strategy folder NOT FOUND"
+          echo "=============================="
+          echo "Config directory:"
+          ls -la config || echo "config folder NOT FOUND"
+          echo "=============================="
+          echo "Data directory:"
+          ls -la data || echo "data folder NOT FOUND"
 
       - name: Run GTI AI
         run: |
