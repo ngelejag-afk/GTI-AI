@@ -1,1 +1,8 @@
+      - name: Show repository structure
+        run: |
+          pwd
+          find .
 
+      - name: Run GTI AI
+        run: |
+          python app.py
